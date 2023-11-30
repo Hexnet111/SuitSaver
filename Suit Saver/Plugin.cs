@@ -16,7 +16,7 @@ namespace SuitSaver
     {
         private const string modGUID = "Hexnet.lethalcompany.suitsaver";
         private const string modName = "Suit Saver";
-        private const string modVersion = "1.0.0";
+        private const string modVersion = "1.0.2";
 
         private readonly Harmony harmony = new Harmony(modGUID);
 
@@ -64,6 +64,43 @@ namespace SuitSaver.Patches
 
             return null;
         }
+        private static void LoadSuitFromFile()
+        {
+            string SavedSuit = LoadFromFile();
+            PlayerControllerB localplayer = GameNetworkManager.Instance.localPlayerController;
+
+            if (SavedSuit == "-1")
+            {
+                return;
+            }
+
+            UnlockableSuit Suit = GetSuitByName(SavedSuit);
+
+            if (Suit != null)
+            {
+                UnlockableSuit.SwitchSuitForPlayer(localplayer, Suit.suitID, false);
+                Suit.SwitchSuitServerRpc((int)localplayer.playerClientId);
+
+                Debug.Log("[SS]: Successfully loaded saved suit. (" + SavedSuit + ")");
+            }
+            else
+            {
+                Debug.Log("[SS]: Failed to load saved suit. Perhaps it's locked? (" + SavedSuit + ")");
+            }
+        }
+
+        [HarmonyPatch(typeof(StartOfRound))]
+        internal class StartPatch
+        {
+            [HarmonyPatch("ResetShip")]
+            [HarmonyPostfix]
+            private static void ResetShipPatch()
+            {
+                Debug.Log("[SS]: Ship has been reset!");
+                Debug.Log("[SS]: Reloading suit...");
+                LoadSuitFromFile();
+            }
+        }
 
         [HarmonyPatch(typeof(UnlockableSuit))]
         internal class SuitPatch
@@ -88,27 +125,7 @@ namespace SuitSaver.Patches
             [HarmonyPostfix]
             private static void LoadSuitPatch(ref PlayerControllerB __instance)
             {
-                string SavedSuit = LoadFromFile();
-                PlayerControllerB localplayer = GameNetworkManager.Instance.localPlayerController;
-
-                if (SavedSuit == "-1")
-                {
-                    return;
-                }
-
-                UnlockableSuit Suit = GetSuitByName(SavedSuit);
-
-                if (Suit != null)
-                {
-                    UnlockableSuit.SwitchSuitForPlayer(localplayer, Suit.suitID, false);
-                    Suit.SwitchSuitServerRpc((int)localplayer.playerClientId);
-
-                    Debug.Log("[SS]: Successfully loaded saved suit. (" + SavedSuit + ")");
-                }
-                else
-                {
-                    Debug.Log("[SS]: Failed to load saved suit. Perhaps it's locked? (" + SavedSuit + ")");
-                }
+                LoadSuitFromFile();
             }
         }
     }

@@ -2,10 +2,6 @@ D:\Visual Studio Projects\Suit Saver\Suit Saver\obj\Debug\Suit Saver.csproj.Asse
 D:\Visual Studio Projects\Suit Saver\Suit Saver\obj\Debug\Suit Saver.csproj.CoreCompileInputs.cache
 D:\Visual Studio Projects\Suit Saver\Suit Saver\bin\Debug\Suit Saver.dll
 D:\Visual Studio Projects\Suit Saver\Suit Saver\bin\Debug\Suit Saver.pdb
-D:\Visual Studio Projects\Suit Saver\Suit Saver\bin\Debug\0Harmony.xml
-D:\Visual Studio Projects\Suit Saver\Suit Saver\bin\Debug\BepInEx.xml
-D:\Visual Studio Projects\Suit Saver\Suit Saver\bin\Debug\MonoMod.RuntimeDetour.xml
-D:\Visual Studio Projects\Suit Saver\Suit Saver\bin\Debug\MonoMod.Utils.xml
 D:\Visual Studio Projects\Suit Saver\Suit Saver\obj\Debug\Suit Saver.csproj.CopyComplete
 D:\Visual Studio Projects\Suit Saver\Suit Saver\obj\Debug\Suit Saver.dll
 D:\Visual Studio Projects\Suit Saver\Suit Saver\obj\Debug\Suit Saver.pdb
