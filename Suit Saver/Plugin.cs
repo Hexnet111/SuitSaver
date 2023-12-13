@@ -16,7 +16,7 @@ namespace SuitSaver
     {
         private const string modGUID = "Hexnet.lethalcompany.suitsaver";
         private const string modName = "Suit Saver";
-        private const string modVersion = "1.0.2";
+        private const string modVersion = "1.1.0";
 
         private readonly Harmony harmony = new Harmony(modGUID);
 
@@ -31,6 +31,7 @@ namespace SuitSaver
 
 namespace SuitSaver.Patches
 {
+    [HarmonyPatch]
     internal class Patches
     {
         public static string SavePath = Application.persistentDataPath + "\\suitsaver.txt";
@@ -52,13 +53,16 @@ namespace SuitSaver.Patches
         {
             List<UnlockableItem> Unlockables = StartOfRound.Instance.unlockablesList.unlockables;
 
-            foreach (UnlockableSuit unlockable in UnityEngine.Object.FindObjectsOfType<UnlockableSuit>())
+            foreach (UnlockableSuit unlockable in Resources.FindObjectsOfTypeAll<UnlockableSuit>())
             {
-                string SuitName = Unlockables[unlockable.suitID].unlockableName;
-
-                if (SuitName == Name)
+                if (unlockable.syncedSuitID.Value >= 0)
                 {
-                    return unlockable;
+                    string SuitName = Unlockables[unlockable.syncedSuitID.Value].unlockableName;
+
+                    if (SuitName == Name)
+                    {
+                        return unlockable;
+                    }
                 }
             }
 
@@ -78,7 +82,7 @@ namespace SuitSaver.Patches
 
             if (Suit != null)
             {
-                UnlockableSuit.SwitchSuitForPlayer(localplayer, Suit.suitID, false);
+                UnlockableSuit.SwitchSuitForPlayer(localplayer, Suit.syncedSuitID.Value, false);
                 Suit.SwitchSuitServerRpc((int)localplayer.playerClientId);
 
                 Debug.Log("[SS]: Successfully loaded saved suit. (" + SavedSuit + ")");
@@ -112,6 +116,7 @@ namespace SuitSaver.Patches
                 PlayerControllerB localplayer = GameNetworkManager.Instance.localPlayerController;
                 string SuitName = StartOfRound.Instance.unlockablesList.unlockables[localplayer.currentSuitID].unlockableName;
 
+                GetSuitByName(SuitName);
                 SaveToFile(SuitName);
 
                 Debug.Log("[SS]: Successfully saved current suit. (" + SuitName + ")");
