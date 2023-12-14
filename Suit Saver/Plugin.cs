@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using BepInEx;
@@ -16,7 +18,7 @@ namespace SuitSaver
     {
         private const string modGUID = "Hexnet.lethalcompany.suitsaver";
         private const string modName = "Suit Saver";
-        private const string modVersion = "1.1.0";
+        private const string modVersion = "1.1.1";
 
         private readonly Harmony harmony = new Harmony(modGUID);
 
@@ -85,7 +87,7 @@ namespace SuitSaver.Patches
                 UnlockableSuit.SwitchSuitForPlayer(localplayer, Suit.syncedSuitID.Value, false);
                 Suit.SwitchSuitServerRpc((int)localplayer.playerClientId);
 
-                Debug.Log("[SS]: Successfully loaded saved suit. (" + SavedSuit + ")");
+                Debug.Log("[SS]: Successfully loaded saved suit. (" + SavedSuit + " | " + Suit.syncedSuitID.Value + ")");
             }
             else
             {
@@ -109,6 +111,20 @@ namespace SuitSaver.Patches
         [HarmonyPatch(typeof(UnlockableSuit))]
         internal class SuitPatch
         {
+            [HarmonyPatch("SwitchSuitClientRpc")]
+            [HarmonyPostfix]
+            private static void SyncSuit(ref UnlockableSuit __instance, int playerID)
+            {
+
+                PlayerControllerB localplayer = GameNetworkManager.Instance.localPlayerController;
+                int LocalPlayerID = (int)localplayer.playerClientId;
+
+                if (playerID != LocalPlayerID)
+                {
+                    UnlockableSuit.SwitchSuitForPlayer(StartOfRound.Instance.allPlayerScripts[playerID], __instance.syncedSuitID.Value);
+                }
+            }
+
             [HarmonyPatch("SwitchSuitToThis")]
             [HarmonyPostfix]
             private static void EquipSuitPatch()
@@ -116,7 +132,6 @@ namespace SuitSaver.Patches
                 PlayerControllerB localplayer = GameNetworkManager.Instance.localPlayerController;
                 string SuitName = StartOfRound.Instance.unlockablesList.unlockables[localplayer.currentSuitID].unlockableName;
 
-                GetSuitByName(SuitName);
                 SaveToFile(SuitName);
 
                 Debug.Log("[SS]: Successfully saved current suit. (" + SuitName + ")");
@@ -124,12 +139,29 @@ namespace SuitSaver.Patches
         }
 
         [HarmonyPatch(typeof(PlayerControllerB))]
-        internal class EquipPatch
+        internal class LoadEquipPatch
         {
             [HarmonyPatch("ConnectClientToPlayerObject")]
             [HarmonyPostfix]
             private static void LoadSuitPatch(ref PlayerControllerB __instance)
             {
+                GameNetworkManager.Instance.localPlayerController.gameObject.AddComponent<EquipPatch>();
+            }
+        }
+
+        internal class EquipPatch : MonoBehaviour
+        {
+            void Start()
+            {
+                StartCoroutine(LoadSuit());
+            }
+
+            IEnumerator LoadSuit()
+            {
+                Debug.Log("[SS]: Waiting for suits to sync...");
+
+                yield return new WaitForSeconds(1);
+
                 LoadSuitFromFile();
             }
         }
