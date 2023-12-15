@@ -18,7 +18,7 @@ namespace SuitSaver
     {
         private const string modGUID = "Hexnet.lethalcompany.suitsaver";
         private const string modName = "Suit Saver";
-        private const string modVersion = "1.1.1";
+        private const string modVersion = "1.1.2";
 
         private readonly Harmony harmony = new Harmony(modGUID);
 
@@ -87,7 +87,7 @@ namespace SuitSaver.Patches
                 UnlockableSuit.SwitchSuitForPlayer(localplayer, Suit.syncedSuitID.Value, false);
                 Suit.SwitchSuitServerRpc((int)localplayer.playerClientId);
 
-                Debug.Log("[SS]: Successfully loaded saved suit. (" + SavedSuit + " | " + Suit.syncedSuitID.Value + ")");
+                Debug.Log("[SS]: Successfully loaded saved suit. (" + SavedSuit + ")");
             }
             else
             {
@@ -139,17 +139,17 @@ namespace SuitSaver.Patches
         }
 
         [HarmonyPatch(typeof(PlayerControllerB))]
-        internal class LoadEquipPatch
+        internal class JoinGamePatch
         {
             [HarmonyPatch("ConnectClientToPlayerObject")]
             [HarmonyPostfix]
             private static void LoadSuitPatch(ref PlayerControllerB __instance)
             {
-                GameNetworkManager.Instance.localPlayerController.gameObject.AddComponent<EquipPatch>();
+                GameNetworkManager.Instance.localPlayerController.gameObject.AddComponent<EquipAfterSyncPatch>();
             }
         }
 
-        internal class EquipPatch : MonoBehaviour
+        internal class EquipAfterSyncPatch : MonoBehaviour
         {
             void Start()
             {
