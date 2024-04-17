@@ -18,7 +18,7 @@ namespace SuitSaver
     {
         private const string modGUID = "Hexnet.lethalcompany.suitsaver";
         private const string modName = "Suit Saver";
-        private const string modVersion = "1.1.2";
+        private const string modVersion = "1.2.0";
 
         private readonly Harmony harmony = new Harmony(modGUID);
 
@@ -95,6 +95,30 @@ namespace SuitSaver.Patches
             }
         }
 
+        private static int LoadSuitStartup(string SavedSuit)
+        {
+            PlayerControllerB localplayer = GameNetworkManager.Instance.localPlayerController;
+
+            if (SavedSuit == "-1")
+            {
+                return -1;
+            }
+
+            UnlockableSuit Suit = GetSuitByName(SavedSuit);
+
+            if (Suit != null)
+            {
+                UnlockableSuit.SwitchSuitForPlayer(localplayer, Suit.syncedSuitID.Value, false);
+                Suit.SwitchSuitServerRpc((int)localplayer.playerClientId);
+
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
         [HarmonyPatch(typeof(StartOfRound))]
         internal class StartPatch
         {
@@ -160,9 +184,26 @@ namespace SuitSaver.Patches
             {
                 Debug.Log("[SS]: Waiting for suits to sync...");
 
-                yield return new WaitForSeconds(1);
+                string SavedSuit = LoadFromFile();
 
-                LoadSuitFromFile();
+                for (int i = 0; i < 3; i++)
+                {
+                    int success = LoadSuitStartup(SavedSuit);
+
+                    if (success <= 0)
+                    {
+                        if (success == 0)
+                        {
+                            Debug.Log("[SS]: Failed to load saved suit. Perhaps it's locked? (" + SavedSuit + ")");
+                        }
+
+                        break;
+                    }
+
+                    yield return new WaitForSeconds(1);
+                }
+
+                Debug.Log("[SS]: Successfully loaded saved suit. (" + SavedSuit + ")");
             }
         }
     }

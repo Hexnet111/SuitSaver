@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Visual Studio Projects\\Suit Saver\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{CB7CFB30-B06E-4E41-9DE7-03640E1662EA}|Suit Saver\\Suit Saver.csproj|d:\\visual studio projects\\suit saver\\suit saver\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CB7CFB30-B06E-4E41-9DE7-03640E1662EA}|Suit Saver\\Suit Saver.csproj|solutionrelative:suit saver\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CB7CFB30-B06E-4E41-9DE7-03640E1662EA}|Suit Saver\\Suit Saver.csproj|d:\\visual studio projects\\suit saver\\suit saver\\properties\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CB7CFB30-B06E-4E41-9DE7-03640E1662EA}|Suit Saver\\Suit Saver.csproj|solutionrelative:suit saver\\properties\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AssemblyInfo.cs",
+              "DocumentMoniker": "D:\\Visual Studio Projects\\Suit Saver\\Suit Saver\\Properties\\AssemblyInfo.cs",
+              "RelativeDocumentMoniker": "Suit Saver\\Properties\\AssemblyInfo.cs",
+              "ToolTip": "D:\\Visual Studio Projects\\Suit Saver\\Suit Saver\\Properties\\AssemblyInfo.cs",
+              "RelativeToolTip": "Suit Saver\\Properties\\AssemblyInfo.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACMAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-17T09:02:54.321Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Plugin.cs",
+              "DocumentMoniker": "D:\\Visual Studio Projects\\Suit Saver\\Suit Saver\\Plugin.cs",
+              "RelativeDocumentMoniker": "Suit Saver\\Plugin.cs",
+              "ToolTip": "D:\\Visual Studio Projects\\Suit Saver\\Suit Saver\\Plugin.cs",
+              "RelativeToolTip": "Suit Saver\\Plugin.cs",
+              "ViewState": "AQIAAIoAAAAAAAAAAAAYwLEAAAAYAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-17T07:38:12.798Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
